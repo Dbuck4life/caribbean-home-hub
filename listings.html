@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Listings - Caribbean Home Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c5530, #4a7c59);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .flag-icon {
+            width: 30px;
+            height: 20px;
+            background: linear-gradient(to bottom, 
+                #009639 0%, #009639 20%, 
+                #FFFFFF 20%, #FFFFFF 25%,
+                #FCD116 25%, #FCD116 50%,
+                #FFFFFF 50%, #FFFFFF 55%,
+                #009639 55%, #009639 100%);
+            border: 1px solid #000;
+            position: relative;
+            border-radius: 2px;
+        }
+        
+        .flag-icon::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 10px 0 10px 15px;
+            border-color: transparent transparent transparent #000;
+        }
+        
+        .flag-icon::after {
+            content: '';
+            position: absolute;
+            left: 3px;
+            top: 3px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 7px 0 7px 11px;
+            border-color: transparent transparent transparent #CE1126;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+        
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+        
+        .filters-sidebar {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .filters-sidebar h3 {
+            color: #2c5530;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+        
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #2c5530;
+        }
+        
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #4a7c59;
+        }
+        
+        .listings-container {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .listings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .results-count {
+            color: #2c5530;
+            font-size: 1.1rem;
+        }
+        
+        .view-options {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .sort-select {
+            padding: 0.5rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .view-toggle {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .view-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #2c5530;
+            background: white;
+            color: #2c5530;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .view-btn.active {
+            background: #2c5530;
+            color: white;
+        }
+        
+        .view-btn:hover {
+            background: #2c5530;
+            color: white;
+        }
+        
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .property-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .property-image {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+        }
+        
+        .property-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .property-card:hover .property-image img {
+            transform: scale(1.05);
+        }
+        
+        .image-counter {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .listing-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .verified-agent {
+            background: #28a745;
+            color: white;
+        }
+        
+        .fsbo {
+            background: #ffc107;
+            color: #000;
+        }
+        
+        .price-tag {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: #2c5530;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .property-details {
+            padding: 1.5rem;
+        }
+        
+        .property-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c5530;
+            margin-bottom: 0.5rem;
+        }
+        
+        .property-location {
+            color: #666;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .property-features {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .feature {
+            background: #f8f9fa;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            color: #2c5530;
+        }
+        
+        .agent-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .agent-name {
+            font-weight: bold;
+            color: #2c5530;
+        }
+        
+        .contact-btn {
+            background: #ffd700;
+            color: #2c5530;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .contact-btn:hover {
+            background: #2c5530;
+            color: #ffd700;
+        }
+        
+        .whatsapp-btn {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: 0.5rem;
+        }
+        
+        .whatsapp-btn:hover {
+            background: #1da851;
+        }
+        
+        .load-more {
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .load-more-btn {
+            background: #2c5530;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .load-more-btn:hover {
+            background: #1e3a22;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            
+            .filters-sidebar {
+                position: static;
+            }
+            
+            .properties-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .listings-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <div class="flag-icon"></div>
+                <a href="index.html" style="color: white; text-decoration: none;">Caribbean Home Hub</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#georgetown">Georgetown</a></li>
+                <li><a href="#new-amsterdam">New Amsterdam</a></li>
+                <li><a href="#linden">Linden</a></li>
+                <li><a href="listings.html">All Properties</a></li>
+                <li><a href="#agents">Agents</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <!-- Filters Sidebar -->
+        <div class="filters-sidebar">
+            <h3>Filter Properties</h3>
+            
+            <div class="filter-group">
+                <label for="region">Region</label>
+                <select id="region" name="region">
+                    <option value="">All Regions</option>
+                    <option value="georgetown">Georgetown (Region 4)</option>
+                    <option value="new-amsterdam">New Amsterdam (Region 6)</option>
+                    <option value="linden">Linden (Region 10)</option>
+                    <option value="region1">Region 1 - Barima-Waini</option>
+                    <option value="region2">Region 2 - Pomeroon-Supenaam</option>
+                    <option value="region3">Region 3 - Essequibo Islands-West Demerara</option>
+                    <option value="region4">Region 4 - Demerara-Mahaica</option>
+                    <option value="region5">Region 5 - Mahaica-Berbice</option>
+                    <option value="region6">Region 6 - East Berbice-Corentyne</option>
+                    <option value="region7">Region 7 - Cuyuni-Mazaruni</option>
+                    <option value="region8">Region 8 - Potaro-Siparuni</option>
+                    <option value="region9">Region 9 - Upper Takutu-Upper Essequibo</option>
+                    <option value="region10">Region 10 - Upper Demerara-Berbice</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="property-type">Property Type</label>
+                <select id="property-type" name="property-type">
+                    <option value="">All Types</option>
+                    <option value="residential">Residential</option>
+                    <option value="commercial">Commercial</option>
+                    <option value="agricultural">Agricultural Land</option>
+                    <option value="land">Vacant Land</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="price-range">Price Range (GYD)</label>
+                <select id="price-range">
+                    <option value="">Any Price</option>
+                    <option value="0-10000000">Under $10M</option>
+                    <option value="10000000-25000000">$10M - $25M</option>
+                    <option value="25000000-50000000">$25M - $50M</option>
+                    <option value="50000000-100000000">$50M - $100M</option>
+                    <option value="100000000+">Over $100M</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="bedrooms">Bedrooms</label>
+                <select id="bedrooms" name="bedrooms">
+                    <option value="">Any</option>
+                    <option value="1">1+</option>
+                    <option value="2">2+</option>
+                    <option value="3">3+</option>
+                    <option value="4">4+</option>
+                    <option value="5">5+</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="bathrooms">Bathrooms</label>
+                <select id="bathrooms" name="bathrooms">
+                    <option value="">Any</option>
+                    <option value="1">1+</option>
+                    <option value="2">2+</option>
+                    <option value="3">3+</option>
+                    <option value="4">4+</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="features">Special Features</label>
+                <select id="features">
+                    <option value="">Any</option>
+                    <option value="pool">Swimming Pool</option>
+                    <option value="garden">Garden</option>
+                    <option value="fruit-trees">Fruit Trees</option>
+                    <option value="garage">Garage</option>
+                    <option value="generator">Generator</option>
+                    <option value="ac">Air Conditioning</option>
+                    <option value="security">Security System</option>
+                </select>
+            </div>
+
+            <button class="load-more-btn" onclick="applyFilters()">Apply Filters</button>
+            <button class="contact-btn" onclick="clearFilters()" style="width: 100%; margin-top: 0.5rem;">Clear All</button>
+        </div>
+
+        <!-- Listings Container -->
+        <div class="listings-container">
+            <div class="listings-header">
+                <div class="results-count">
+                    <strong id="results-count">156 properties found</strong> <span id="search-summary"></span>
+                </div>
+                <div class="view-options">
+                    <select class="sort-select">
+                        <option value="newest">Newest First</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="size">Size: Largest First</option>
+                    </select>
+                    <div class="view-toggle">
+                        <button class="view-btn active">Grid</button>
+                        <button class="view-btn">List</button>
+                        <button class="view-btn">Map</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="properties-grid">
+                <!-- Sample Property 1 - Verified Agent -->
+                <div class="property-card" onclick="openProperty('prop1')">
+                    <div class="property-image">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='250'%3E%3Crect width='400' height='250' fill='%234a7c59'/%3E%3Cpath d='M200 50L350 150L200 200L50 150Z' fill='%232c5530'/%3E%3Crect x='175' y='120' width='50' height='80' fill='%23654321'/%3E%3Crect x='185' y='140' width='10' height='15' fill='%2387CEEB'/%3E%3Crect x='205' y='140' width='10' height='15' fill='%2387CEEB'/%3E%3C/svg%3E" alt="Beautiful Family Home">
+                        <div class="image-counter">📷 15</div>
+                        <div class="listing-badge verified-agent">✓ Verified Agent</div>
+                        <div class="price-tag">$35,000,000 GYD</div>
+                    </div>
+                    <div class="property-details">
+                        <div class="property-title">Beautiful Family Home with Garden</div>
+                        <div class="property-location">📍 Prashad Nagar, Georgetown</div>
+                        <div class="property-features">
+                            <span class="feature">4 🛏️</span>
+                            <span class="feature">3 🚿</span>
+                            <span class="feature">250 m²</span>
+                        </div>
+                        <div class="agent-info">
+                            <span class="agent-name">Robert Singh (Owner)</span>
+                            <div>
+                                <button class="contact-btn">Contact</button>
+                                <button class="whatsapp-btn">WhatsApp</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="load-more">
+                <button class="load-more-btn">Load More Properties</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function applyFilters() {
+            // This would normally filter the properties
+            console.log('Applying filters...');
+        }
+
+        function clearFilters() {
+            // Reset all filter inputs
+            document.getElementById('region').value = '';
+            document.getElementById('property-type').value = '';
+            document.getElementById('price-range').value = '';
+            document.getElementById('bedrooms').value = '';
+            document.getElementById('bathrooms').value = '';
+            document.getElementById('features').value = '';
+            
+            // Clear search parameters and reload page
+            window.location.href = 'listings.html';
+        }
+
+        function openProperty(propertyId) {
+            // Navigate to property detail page
+            window.location.href = 'property-detail.html?id=' + propertyId;
+        }
+
+        // Function to read URL parameters and apply filters
+        function loadSearchParameters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let searchSummary = '';
+            let filters = [];
+            
+            // Apply filters from URL parameters
+            urlParams.forEach((value, key) => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.value = value;
+                    
+                    // Build search summary
+                    switch(key) {
+                        case 'region':
+                            const regionText = element.options[element.selectedIndex].text;
+                            if (regionText !== 'All Regions') {
+                                filters.push(`in ${regionText}`);
+                            }
+                            break;
+                        case 'property-type':
+                            if (value) filters.push(`${value} properties`);
+                            break;
+                        case 'bedrooms':
+                            if (value) filters.push(`${value}+ bedrooms`);
+                            break;
+                        case 'bathrooms':
+                            if (value) filters.push(`${value}+ bathrooms`);
+                            break;
+                        case 'min-price':
+                            if (value) {
+                                const formatted = new Intl.NumberFormat('en-GY').format(value);
+                                filters.push(`from ${formatted} GYD`);
+                            }
+                            break;
+                        case 'max-price':
+                            if (value) {
+                                const formatted = new Intl.NumberFormat('en-GY').format(value);
+                                filters.push(`up to ${formatted} GYD`);
+                            }
+                            break;
+                        case 'outdoor':
+                            if (value) filters.push(`with ${value.replace('-', ' ')}`);
+                            break;
+                        case 'parking':
+                            if (value) filters.push(`${value.replace('-', ' ')} parking`);
+                            break;
+                    }
+                }
+            });
+            
+            // Update search summary
+            if (filters.length > 0) {
+                searchSummary = ` for ${filters.join(', ')}`;
+                document.getElementById('search-summary').textContent = searchSummary;
+            }
+            
+            // Simulate filtering (in real app, this would filter actual data)
+            const totalResults = Math.floor(Math.random() * 200) + 50; // Random number between 50-250
+            document.getElementById('results-count').textContent = `${totalResults} properties found`;
+        }
+
+        // Load search parameters when page loads
+        window.addEventListener('DOMContentLoaded', loadSearchParameters);
+    </script>
+</body>
+</html>
+                            <span class="feature">🚗 Garage</span>
+                        </div>
+                        <div class="agent-info">
+                            <span class="agent-name">Sarah Johnson</span>
+                            <div>
+                                <button class="contact-btn">Contact</button>
+                                <button class="whatsapp-btn">WhatsApp</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Property 2 - FSBO -->
+                <div class="property-card" onclick="openProperty('prop2')">
+                    <div class="property-image">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='250'%3E%3Crect width='400' height='250' fill='%23228B22'/%3E%3Cpath d='M200 60L320 140L200 180L80 140Z' fill='%23006400'/%3E%3Crect x='180' y='130' width='40' height='60' fill='%238B4513'/%3E%3Crect x='190' y='150' width='8' height='12' fill='%234169E1'/%3E%3Crect x='202' y='150' width='8' height='12' fill='%234169E1'/%3E%3C/svg%3E" alt="Modern Commercial Building">
+                        <div class="image-counter">📷 8</div>
+                        <div class="listing-badge fsbo">For Sale By Owner</div>
+                        <div class="price-tag">$75,000,000 GYD</div>
+                    </div>
+                    <div class="property-details">
+                        <div class="property-title">Modern Commercial Building</div>
+                        <div class="property-location">📍 Water Street, Georgetown</div>
+                        <div class="property-features">
+                            <span class="feature">Commercial</span>
+                            <span class="feature">3 Floors</span>
+                            <span class="feature">500 m²</span>
+                            <span class="feature">🏢 Office</span>
+                            <span class="feature">🅿️ Parking</span>
+                        </div>
+                        <div class="agent-info">
+                            <span class="agent-name">Michael Chen (Owner)</span>
+                            <div>
+                                <button class="contact-btn">Contact</button>
+                                <button class="whatsapp-btn">WhatsApp</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Property 3 - Agricultural Land -->
+                <div class="property-card" onclick="openProperty('prop3')">
+                    <div class="property-image">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='250'%3E%3Crect width='400' height='250' fill='%2332CD32'/%3E%3Cpath d='M0 200Q100 180 200 200T400 200V250H0Z' fill='%23228B22'/%3E%3Ccircle cx='100' cy='120' r='20' fill='%23006400'/%3E%3Ccircle cx='200' cy='100' r='25' fill='%23006400'/%3E%3Ccircle cx='300' cy='130' r='18' fill='%23006400'/%3E%3C/svg%3E" alt="Agricultural Land with Fruit Trees">
+                        <div class="image-counter">📷 12</div>
+                        <div class="listing-badge verified-agent">✓ Verified Agent</div>
+                        <div class="price-tag">$15,000,000 GYD</div>
+                    </div>
+                    <div class="property-details">
+                        <div class="property-title">Agricultural Land with Fruit Trees</div>
+                        <div class="property-location">📍 East Coast Demerara, Region 4</div>
+                        <div class="property-features">
+                            <span class="feature">Agricultural</span>
+                            <span class="feature">2 hectares</span>
+                            <span class="feature">🥭 Mango Trees</span>
+                            <span class="feature">🥥 Coconut</span>
+                            <span class="feature">💧 Water Access</span>
+                        </div>
+                        <div class="agent-info">
+                            <span class="agent-name">David Williams</span>
+                            <div>
+                                <button class="contact-btn">Contact</button>
+                                <button class="whatsapp-btn">WhatsApp</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Property 4 - Luxury Home -->
+                <div class="property-card" onclick="openProperty('prop4')">
+                    <div class="property-image">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='250'%3E%3Crect width='400' height='250' fill='%236B8E23'/%3E%3Cpath d='M200 40L360 140L200 190L40 140Z' fill='%23556B2F'/%3E%3Crect x='170' y='110' width='60' height='80' fill='%23D2691E'/%3E%3Crect x='180' y='130' width='12' height='18' fill='%2387CEFA'/%3E%3Crect x='208' y='130' width='12' height='18' fill='%2387CEFA'/%3E%3Ccircle cx='320' cy='180' r='30' fill='%2300BFFF'/%3E%3C/svg%3E" alt="Luxury Home with Pool">
+                        <div class="image-counter">📷 25</div>
+                        <div class="listing-badge verified-agent">✓ Verified Agent</div>
+                        <div class="price-tag">$125,000,000 GYD</div>
+                    </div>
+                    <div class="property-details">
+                        <div class="property-title">Luxury Home with Pool & Security</div>
+                        <div class="property-location">📍 Bel Air Gardens, Georgetown</div>
+                        <div class="property-features">
+                            <span class="feature">5 🛏️</span>
+                            <span class="feature">4 🚿</span>
+                            <span class="feature">450 m²</span>
+                            <span class="feature">🏊 Pool</span>
+                            <span class="feature">🔒 Security</span>
+                            <span class="feature">❄️ AC</span>
+                        </div>
+                        <div class="agent-info">
+                            <span class="agent-name">Maria Rodriguez</span>
+                            <div>
+                                <button class="contact-btn">Contact</button>
+                                <button class="whatsapp-btn">WhatsApp</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Property 5 - New Amsterdam -->
+                <div class="property-card" onclick="openProperty('prop5')">
+                    <div class="property-image">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='250'%3E%3Crect width='400' height='250' fill='%23808000'/%3E%3Cpath d='M200 50L340 130L200 180L60 130Z' fill='%23556B2F'/%3E%3Crect x='185' y='120' width='30' height='60' fill='%23A0522D'/%3E%3Crect x='190' y='140' width='6' height='10' fill='%23ADD8E6'/%3E%3Crect x='204' y='140' width='6' height='10' fill='%23ADD8E6'/%3E%3C/svg%3E" alt="Starter Home">
+                        <div class="image-counter">📷 10</div>
+                        <div class="listing-badge verified-agent">✓ Verified Agent</div>
+                        <div class="price-tag">$18,500,000 GYD</div>
+                    </div>
+                    <div class="property-details">
+                        <div class="property-title">Perfect Starter Home</div>
+                        <div class="property-location">📍 Canefield, New Amsterdam</div>
+                        <div class="property-features">
+                            <span class="feature">3 🛏️</span>
+                            <span class="feature">2 🚿</span>
+                            <span class="feature">120 m²</span>
+                            <span class="feature">🌱 Garden</span>
+                            <span class="feature">🚗 Carport</span>
+                        </div>
+                        <div class="agent-info">
+                            <span class="agent-name">James Patterson</span>
+                            <div>
+                                <button class="contact-btn">Contact</button>
+                                <button class="whatsapp-btn">WhatsApp</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Property 6 - Linden -->
+                <div class="property-card" onclick="openProperty('prop6')">
+                    <div class="property-image">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='250'%3E%3Crect width='400' height='250' fill='%239ACD32'/%3E%3Cpath d='M200 45L350 125L200 175L50 125Z' fill='%236B8E23'/%3E%3Crect x='175' y='115' width='50' height='60' fill='%23CD853F'/%3E%3Crect x='185' y='135' width='10' height='12' fill='%23B0E0E6'/%3E%3Crect x='205' y='135' width='10' height='12' fill='%23B0E0E6'/%3E%3C/svg%3E" alt="Family Home Linden">
+                        <div class="image-counter">📷 18</div>
+                        <div class="listing-badge fsbo">For Sale By Owner</div>
+                        <div class="price-tag">$22,000,000 GYD</div>
+                    </div>
+                    <div class="property-details">
+                        <div class="property-title">Family Home Near Schools</div>
+                        <div class="property-location">📍 Mackenzie, Linden</div>
+                        <div class="property-features">
+                            <span class="feature">4 🛏️</span>
+                            <span class="feature">2 🚿</span>
+                            <span class="feature">180 m²</span>
+                            <span class="feature">🏫 Near Schools</span>
+                            <span class="feature">🌳 Garden</span>

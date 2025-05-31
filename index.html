@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caribbean Home Hub - Find Your Dream Property in Guyana</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c5530, #4a7c59);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .flag-icon {
+            width: 30px;
+            height: 20px;
+            background: linear-gradient(to bottom, 
+                #009639 0%, #009639 20%, 
+                #FFFFFF 20%, #FFFFFF 25%,
+                #FCD116 25%, #FCD116 50%,
+                #FFFFFF 50%, #FFFFFF 55%,
+                #009639 55%, #009639 100%);
+            border: 1px solid #000;
+            position: relative;
+            border-radius: 2px;
+        }
+        
+        .flag-icon::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 10px 0 10px 15px;
+            border-color: transparent transparent transparent #000;
+        }
+        
+        .flag-icon::after {
+            content: '';
+            position: absolute;
+            left: 3px;
+            top: 3px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 7px 0 7px 11px;
+            border-color: transparent transparent transparent #CE1126;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, rgba(0,150,57,0.9), rgba(44,85,48,0.8)), 
+                        linear-gradient(45deg, #009639 0%, #2c5530 50%, #4a7c59 100%);
+            background-size: cover;
+            background-position: center;
+            height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(252,209,22,0.1) 0%, transparent 25%),
+                radial-gradient(circle at 75% 75%, rgba(252,209,22,0.1) 0%, transparent 25%);
+            background-size: 200px 200px;
+        }
+        
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.2);
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            border-left: 4px solid #FCD116;
+            backdrop-filter: blur(10px);
+        }
+        
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.2);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+        }
+        
+        .cta-button {
+            background: #ffd700;
+            color: #2c5530;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,215,0,0.4);
+        }
+        
+        .search-section {
+            background: white;
+            padding: 4rem 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .search-form {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-top: -5rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #2c5530;
+        }
+        
+        .form-group select,
+        .form-group input {
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #4a7c59;
+        }
+        
+        .search-button {
+            background: #2c5530;
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .search-button:hover {
+            background: #1e3a22;
+        }
+        
+        .city-button {
+            background: #ffd700;
+            color: #2c5530;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0.25rem;
+        }
+        
+        .city-button:hover {
+            background: #2c5530;
+            color: #ffd700;
+            transform: translateY(-2px);
+        }
+        
+        .city-button.active {
+            background: #2c5530;
+            color: #ffd700;
+        }
+        
+        .features {
+            background: #f8f9fa;
+            padding: 4rem 0;
+        }
+        
+        .features h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #2c5530;
+            font-size: 2.5rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stats {
+            background: #2c5530;
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .stat-item h3 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: #ffd700;
+        }
+        
+        footer {
+            background: #1e3a22;
+            color: white;
+            padding: 3rem 0 1rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #ffd700;
+        }
+        
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-section a:hover {
+            color: #ffd700;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <div class="flag-icon"></div>
+                Caribbean Home Hub
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#georgetown">Georgetown</a></li>
+                <li><a href="#new-amsterdam">New Amsterdam</a></li>
+                <li><a href="#linden">Linden</a></li>
+                <li><a href="#properties">All Properties</a></li>
+                <li><a href="#agents">Agents</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Find Your Dream Property in Guyana</h1>
+            <p>The Caribbean's Premier Real Estate Platform</p>
+            <a href="#search" class="cta-button">Start Your Search</a>
+        </div>
+    </section>
+
+    <section id="search" class="search-section">
+        <div class="container">
+            <div class="search-form">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: #2c5530;">Search Properties</h2>
+                
+                <!-- Popular Cities Quick Search -->
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h3 style="color: #2c5530; margin-bottom: 1rem;">Popular Areas</h3>
+                    <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                        <button type="button" class="city-button" onclick="selectCity('georgetown')">Georgetown</button>
+                        <button type="button" class="city-button" onclick="selectCity('new-amsterdam')">New Amsterdam</button>
+                        <button type="button" class="city-button" onclick="selectCity('linden')">Linden</button>
+                        <button type="button" class="city-button" onclick="selectCity('all')">All Regions</button>
+                    </div>
+                </div>
+                <form onsubmit="searchProperties(event)">
+                    <!-- Basic Search Row -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="region">Region</label>
+                            <select id="region" name="region">
+                                <option value="">All Regions</option>
+                                <option value="georgetown">Georgetown (Region 4)</option>
+                                <option value="new-amsterdam">New Amsterdam (Region 6)</option>
+                                <option value="linden">Linden (Region 10)</option>
+                                <option value="region1">Region 1 - Barima-Waini</option>
+                                <option value="region2">Region 2 - Pomeroon-Supenaam</option>
+                                <option value="region3">Region 3 - Essequibo Islands-West Demerara</option>
+                                <option value="region4">Region 4 - Demerara-Mahaica</option>
+                                <option value="region5">Region 5 - Mahaica-Berbice</option>
+                                <option value="region6">Region 6 - East Berbice-Corentyne</option>
+                                <option value="region7">Region 7 - Cuyuni-Mazaruni</option>
+                                <option value="region8">Region 8 - Potaro-Siparuni</option>
+                                <option value="region9">Region 9 - Upper Takutu-Upper Essequibo</option>
+                                <option value="region10">Region 10 - Upper Demerara-Berbice</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="property-type">Property Type</label>
+                            <select id="property-type" name="property-type">
+                                <option value="">All Types</option>
+                                <option value="residential">Residential</option>
+                                <option value="commercial">Commercial</option>
+                                <option value="agricultural">Agricultural Land</option>
+                                <option value="land">Vacant Land</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="min-price">Min Price (GYD)</label>
+                            <input type="number" id="min-price" name="min-price" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="max-price">Max Price (GYD)</label>
+                            <input type="number" id="max-price" name="max-price" placeholder="No limit">
+                        </div>
+                    </div>
+
+                    <!-- Property Details Row -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bedrooms">Bedrooms</label>
+                            <select id="bedrooms" name="bedrooms">
+                                <option value="">Any</option>
+                                <option value="1">1+</option>
+                                <option value="2">2+</option>
+                                <option value="3">3+</option>
+                                <option value="4">4+</option>
+                                <option value="5">5+</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bathrooms">Bathrooms</label>
+                            <select id="bathrooms" name="bathrooms">
+                                <option value="">Any</option>
+                                <option value="1">1+</option>
+                                <option value="2">2+</option>
+                                <option value="3">3+</option>
+                                <option value="4">4+</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="min-size">Min Size (m²)</label>
+                            <input type="number" id="min-size" name="min-size" placeholder="Any size">
+                        </div>
+                        <div class="form-group">
+                            <label for="max-size">Max Size (m²)</label>
+                            <input type="number" id="max-size" name="max-size" placeholder="Any size">
+                        </div>
+                    </div>
+
+                    <!-- Caribbean Features Row -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="parking">Parking</label>
+                            <select id="parking" name="parking">
+                                <option value="">Any</option>
+                                <option value="covered">Covered Parking</option>
+                                <option value="garage">Garage</option>
+                                <option value="carport">Carport</option>
+                                <option value="street">Street Parking</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="outdoor">Outdoor Features</label>
+                            <select id="outdoor" name="outdoor">
+                                <option value="">Any</option>
+                                <option value="pool">Swimming Pool</option>
+                                <option value="garden">Garden</option>
+                                <option value="fruit-trees">Fruit Trees</option>
+                                <option value="veranda">Veranda/Deck</option>
+                                <option value="yard">Large Yard</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="condition">Property Condition</label>
+                            <select id="condition" name="condition">
+                                <option value="">Any</option>
+                                <option value="new">Newly Built</option>
+                                <option value="excellent">Excellent</option>
+                                <option value="good">Good</option>
+                                <option value="needs-work">Needs Renovation</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="utilities">Utilities</label>
+                            <select id="utilities" name="utilities">
+                                <option value="">Any</option>
+                                <option value="all">All Connected</option>
+                                <option value="electricity">Electricity</option>
+                                <option value="water">Water</option>
+                                <option value="internet">Internet Ready</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Features Toggle -->
+                    <div style="text-align: center; margin: 1rem 0;">
+                        <button type="button" id="advanced-toggle" class="city-button" onclick="toggleAdvancedFilters()">More Filters</button>
+                    </div>
+
+                    <!-- Advanced Features Row (Hidden by default) -->
+                    <div id="advanced-filters" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="age">Property Age</label>
+                                <select id="age" name="age">
+                                    <option value="">Any Age</option>
+                                    <option value="new">Under 5 years</option>
+                                    <option value="recent">5-15 years</option>
+                                    <option value="established">15-30 years</option>
+                                    <option value="older">Over 30 years</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="security">Security Features</label>
+                                <select id="security" name="security">
+                                    <option value="">Any</option>
+                                    <option value="gated">Gated Community</option>
+                                    <option value="security-system">Security System</option>
+                                    <option value="guard">Security Guard</option>
+                                    <option value="fenced">Fully Fenced</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="amenities">Premium Amenities</label>
+                                <select id="amenities" name="amenities">
+                                    <option value="">Any</option>
+                                    <option value="ac">Air Conditioning</option>
+                                    <option value="generator">Generator</option>
+                                    <option value="solar">Solar Panels</option>
+                                    <option value="water-tank">Water Tank</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="accessibility">Accessibility</label>
+                                <select id="accessibility" name="accessibility">
+                                    <option value="">Any</option>
+                                    <option value="wheelchair">Wheelchair Accessible</option>
+                                    <option value="single-level">Single Level</option>
+                                    <option value="wide-doors">Wide Doorways</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <button type="submit" class="search-button">Search Properties</button>
+                        <button type="button" class="city-button" onclick="clearFilters()" style="margin-left: 1rem;">Clear All</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2>Why Choose Caribbean Home Hub?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🏠</div>
+                    <h3>Comprehensive Listings</h3>
+                    <p>Browse properties across all 10 regions of Guyana, from residential homes to agricultural land.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Verified Agents</h3>
+                    <p>Connect with trusted, professional real estate agents throughout Guyana.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile Optimized</h3>
+                    <p>Search and browse properties seamlessly on any device, anywhere in the world.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Transparent Pricing</h3>
+                    <p>View accurate pricing in both GYD and USD for international buyers.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>International Reach</h3>
+                    <p>Perfect for diaspora and international investors looking to invest in Guyana.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure Platform</h3>
+                    <p>Safe and secure property transactions with verified listings and agents.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <h2 style="margin-bottom: 3rem;">Platform Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>100+</h3>
+                    <p>Active Listings</p>
+                </div>
+                <div class="stat-item">
+                    <h3>25+</h3>
+                    <p>Verified Agents</p>
+                </div>
+                <div class="stat-item">
+                    <h3>10</h3>
+                    <p>Regions Covered</p>
+                </div>
+                <div class="stat-item">
+                    <h3>50+</h3>
+                    <p>Happy Clients</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Caribbean Home Hub</h3>
+                    <p>Guyana's premier real estate platform connecting buyers, sellers, and agents across all regions.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="#properties">Browse Properties</a>
+                    <a href="#agents">Find an Agent</a>
+                    <a href="#about">About Us</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Regions</h3>
+                    <a href="#">Georgetown</a>
+                    <a href="#">New Amsterdam</a>
+                    <a href="#">Linden</a>
+                    <a href="#">All Regions</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <p>Email: info@caribbeanhomehub.com</p>
+                    <p>Phone: +592-XXX-XXXX</p>
+                    <p>WhatsApp: +592-XXX-XXXX</p>
+                </div>
+            </div>
+            <div style="border-top: 1px solid #4a7c59; padding-top: 1rem; margin-top: 2rem;">
+                <p>&copy; 2025 Caribbean Home Hub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function selectCity(city) {
+            const regionSelect = document.getElementById('region');
+            const buttons = document.querySelectorAll('.city-button');
+            
+            // Remove active class from all buttons
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // Set the region dropdown
+            switch(city) {
+                case 'georgetown':
+                    regionSelect.value = 'georgetown';
+                    break;
+                case 'new-amsterdam':
+                    regionSelect.value = 'new-amsterdam';
+                    break;
+                case 'linden':
+                    regionSelect.value = 'linden';
+                    break;
+                case 'all':
+                    regionSelect.value = '';
+                    break;
+            }
+        }
+
+        function toggleAdvancedFilters() {
+            const advancedFilters = document.getElementById('advanced-filters');
+            const toggleButton = document.getElementById('advanced-toggle');
+            
+            if (advancedFilters.style.display === 'none') {
+                advancedFilters.style.display = 'block';
+                toggleButton.textContent = 'Fewer Filters';
+            } else {
+                advancedFilters.style.display = 'none';
+                toggleButton.textContent = 'More Filters';
+            }
+        }
+
+        function clearFilters() {
+            const form = document.querySelector('form');
+            form.reset();
+            
+            // Hide advanced filters
+            const advancedFilters = document.getElementById('advanced-filters');
+            const toggleButton = document.getElementById('advanced-toggle');
+            advancedFilters.style.display = 'none';
+            toggleButton.textContent = 'More Filters';
+            
+            // Remove active class from city buttons
+            const buttons = document.querySelectorAll('.city-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+        }
+
+        function searchProperties(event) {
+            event.preventDefault();
+            
+            // Get all form values
+            const formData = new FormData(event.target);
+            const searchParams = new URLSearchParams();
+            
+            // Add all non-empty values to search params
+            for (let [key, value] of formData.entries()) {
+                if (value && value.trim() !== '') {
+                    searchParams.append(key, value);
+                }
+            }
+            
+            // Redirect to listings page with search parameters
+            window.location.href = 'listings.html?' + searchParams.toString();
+        }
+    </script>
+</body>
+</html>

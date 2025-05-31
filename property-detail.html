@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beautiful Family Home with Garden - Caribbean Home Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c5530, #4a7c59);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .flag-icon {
+            width: 30px;
+            height: 20px;
+            background: linear-gradient(to bottom, 
+                #009639 0%, #009639 20%, 
+                #FFFFFF 20%, #FFFFFF 25%,
+                #FCD116 25%, #FCD116 50%,
+                #FFFFFF 50%, #FFFFFF 55%,
+                #009639 55%, #009639 100%);
+            border: 1px solid #000;
+            position: relative;
+            border-radius: 2px;
+        }
+        
+        .flag-icon::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 10px 0 10px 15px;
+            border-color: transparent transparent transparent #000;
+        }
+        
+        .flag-icon::after {
+            content: '';
+            position: absolute;
+            left: 3px;
+            top: 3px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 7px 0 7px 11px;
+            border-color: transparent transparent transparent #CE1126;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+        
+        .breadcrumb {
+            background: white;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .breadcrumb-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .breadcrumb a {
+            color: #2c5530;
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .property-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+        
+        .property-main {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .property-gallery {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+        }
+        
+        .gallery-main {
+            position: relative;
+            height: 100%;
+        }
+        
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        
+        .gallery-image.active {
+            display: block;
+        }
+        
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            padding: 1rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: background-color 0.3s;
+        }
+        
+        .gallery-nav:hover {
+            background: rgba(0,0,0,0.9);
+        }
+        
+        .gallery-prev {
+            left: 1rem;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .gallery-next {
+            right: 1rem;
+            border-radius: 5px 0 0 5px;
+        }
+        
+        .gallery-counter {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+        
+        .gallery-thumbnails {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            background: #f8f9fa;
+        }
+        
+        .thumbnail {
+            width: 80px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+            flex-shrink: 0;
+        }
+        
+        .thumbnail.active {
+            opacity: 1;
+            border: 2px solid #2c5530;
+        }
+        
+        .thumbnail:hover {
+            opacity: 1;
+        }
+        
+        .property-info {
+            padding: 2rem;
+        }
+        
+        .property-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .property-title {
+            flex: 1;
+        }
+        
+        .property-title h1 {
+            font-size: 2rem;
+            color: #2c5530;
+            margin-bottom: 0.5rem;
+        }
+        
+        .property-location {
+            color: #666;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .property-price {
+            background: #2c5530;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 200px;
+        }
+        
+        .price-main {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .price-usd {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .listing-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .verified-agent {
+            background: #28a745;
+            color: white;
+        }
+        
+        .fsbo {
+            background: #ffc107;
+            color: #000;
+        }
+        
+        .property-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .feature-item {
+            text-align: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-label {
+            font-weight: bold;
+            color: #2c5530;
+        }
+        
+        .property-description {
+            margin: 2rem 0;
+        }
+        
+        .property-description h3 {
+            color: #2c5530;
+            margin-bottom: 1rem;
+        }
+        
+        .property-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .details-section {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+        
+        .details-section h4 {
+            color: #2c5530;
+            margin-bottom: 1rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .contact-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .agent-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1rem;
+            border: 3px solid #2c5530;
+        }
+        
+        .agent-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2c5530;
+            margin-bottom: 0.5rem;
+        }
+        
+        .agent-title {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .agent-rating {
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+            display: block;
+        }
+        
+        .btn-primary {
+            background: #2c5530;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1e3a22;
+        }
+        
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+        }
+        
+        .btn-whatsapp:hover {
+            background: #1da851;
+        }
+        
+        .btn-secondary {
+            background: #ffd700;
+            color: #2c5530;
+        }
+        
+        .btn-secondary:hover {
+            background: #2c5530;
+            color: #ffd700;
+        }
+        
+        .action-buttons {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .action-buttons h4 {
+            color: #2c5530;
+            margin-bottom: 1rem;
+        }
+        
+        .mortgage-calculator {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .mortgage-calculator h4 {
+            color: #2c5530;
+            margin-bottom: 1rem;
+        }
+        
+        .calculator-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #2c5530;
+        }
+        
+        .form-group input {
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #4a7c59;
+        }
+        
+        .similar-properties {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            grid-column: 1 / -1;
+            margin-top: 2rem;
+        }
+        
+        .similar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .similar-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .similar-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .similar-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .similar-info {
+            padding: 1rem;
+        }
+        
+        .similar-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .similar-price {
+            color: #2c5530;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .property-container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            
+            .property-header {
+                flex-direction: column;
+            }
+            
+            .property-features {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .property-details-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .property-gallery {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <div class="flag-icon"></div>
+                <a href="index.html" style="color: white; text-decoration: none;">Caribbean Home Hub</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#georgetown">Georgetown</a></li>
+                <li><a href="#new-amsterdam">New Amsterdam</a></li>
+                <li><a href="#linden">Linden</a></li>
+                <li><a href="listings.html">All Properties</a></li>
+                <li><a href="#agents">Agents</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="breadcrumb">
+        <div class="breadcrumb-container">
+            <a href="index.html">Home</a> > 
+            <a href="listings.html">Properties</a> > 
+            <a href="#georgetown">Georgetown</a> > 
+            Beautiful Family Home with Garden
+        </div>
+    </div>
+
+    <div class="property-container">
+        <div class="property-main">
+            <!-- Photo Gallery -->
+            <div class="property-gallery">
+                <div class="gallery-main">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500'%3E%3Crect width='800' height='500' fill='%234a7c59'/%3E%3Cpath d='M400 100L700 300L400 400L100 300Z' fill='%232c5530'/%3E%3Crect x='350' y='240' width='100' height='160' fill='%23654321'/%3E%3Crect x='370' y='280' width='20' height='30' fill='%2387CEEB'/%3E%3Crect x='410' y='280' width='20' height='30' fill='%2387CEEB'/%3E%3C/svg%3E" alt="Main Property Image" class="gallery-image active">
+                    
+                    <!-- Additional sample images -->
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500'%3E%3Crect width='800' height='500' fill='%23E6E6FA'/%3E%3Crect x='100' y='100' width='600' height='300' fill='%23F5F5DC'/%3E%3Crect x='150' y='150' width='200' height='200' fill='%23FFB6C1'/%3E%3Crect x='450' y='150' width='200' height='200' fill='%2398FB98'/%3E%3Ctext x='400' y='50' text-anchor='middle' fill='%232c5530' font-size='24'%3ELiving Room%3C/text%3E%3C/svg%3E" alt="Living Room" class="gallery-image">
+                    
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500'%3E%3Crect width='800' height='500' fill='%23F0F8FF'/%3E%3Crect x='100' y='100' width='600' height='300' fill='%23FFFFF0'/%3E%3Crect x='150' y='150' width='150' height='100' fill='%23FF6347'/%3E%3Crect x='350' y='150' width='100' height='200' fill='%234169E1'/%3E%3Crect x='500' y='150' width='150' height='150' fill='%23FFD700'/%3E%3Ctext x='400' y='50' text-anchor='middle' fill='%232c5530' font-size='24'%3EKitchen%3C/text%3E%3C/svg%3E" alt="Kitchen" class="gallery-image">
+                    
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500'%3E%3Crect width='800' height='500' fill='%23FFF8DC'/%3E%3Crect x='100' y='100' width='600' height='300' fill='%23F5F5F5'/%3E%3Crect x='200' y='150' width='400' height='150' fill='%23708090'/%3E%3Crect x='150' y='320' width='100' height='50' fill='%23D2B48C'/%3E%3Crect x='550' y='320' width='100' height='50' fill='%23D2B48C'/%3E%3Ctext x='400' y='50' text-anchor='middle' fill='%232c5530' font-size='24'%3EMaster Bedroom%3C/text%3E%3C/svg%3E" alt="Master Bedroom" class="gallery-image">
+                    
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500'%3E%3Crect width='800' height='500' fill='%23F0FFFF'/%3E%3Crect x='100' y='100' width='600' height='300' fill='%23FFFFFF'/%3E%3Crect x='200' y='150' width='100' height='150' fill='%23ADD8E6'/%3E%3Crect x='350' y='200' width='100' height='100' fill='%23F0E68C'/%3E%3Crect x='500' y='150' width='100' height='150' fill='%23DDA0DD'/%3E%3Ctext x='400' y='50' text-anchor='middle' fill='%232c5530' font-size='24'%3EBathroom%3C/text%3E%3C/svg%3E" alt="Bathroom" class="gallery-image">
+                </div>
+                
+                <button class="gallery-nav gallery-prev" onclick="changeImage(-1)">❮</button>
+                <button class="gallery-nav gallery-next" onclick="changeImage(1)">❯</button>
+                <div class="gallery-counter">
+                    <span id="current-image">1</span> / <span id="total-images">15</span>
+                </div>
+            </div>
+            
+            <!-- Thumbnails -->
+            <div class="gallery-thumbnails">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='60'%3E%3Crect width='80' height='60' fill='%234a7c59'/%3E%3Cpath d='M40 10L70 30L40 40L10 30Z' fill='%232c5530'/%3E%3C/svg%3E" alt="Thumbnail 1" class="thumbnail active" onclick="showImage(0)">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='60'%3E%3Crect width='80' height='60' fill='%23E6E6FA'/%3E%3Crect x='10' y='10' width='60' height='40' fill='%23F5F5DC'/%3E%3C/svg%3E" alt="Thumbnail 2" class="thumbnail" onclick="showImage(1)">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='60'%3E%3Crect width='80' height='60' fill='%23F0F8FF'/%3E%3Crect x='10' y='10' width='60' height='40' fill='%23FFFFF0'/%3E%3C/svg%3E" alt="Thumbnail 3" class="thumbnail" onclick="showImage(2)">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='60'%3E%3Crect width='80' height='60' fill='%23FFF8DC'/%3E%3Crect x='10' y='10' width='60' height='40' fill='%23F5F5F5'/%3E%3C/svg%3E" alt="Thumbnail 4" class="thumbnail" onclick="showImage(3)">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='60'%3E%3Crect width='80' height='60' fill='%23F0FFFF'/%3E%3Crect x='10' y='10' width='60' height='40' fill='%23FFFFFF'/%3E%3C/svg%3E" alt="Thumbnail 5" class="thumbnail" onclick="showImage(4)">
+            </div>
+            
+            <!-- Property Information -->
+            <div class="property-info">
+                <div class="property-header">
+                    <div class="property-title">
+                        <div class="listing-badge verified-agent">✓ Verified Agent</div>
+                        <h1>Beautiful Family Home with Garden</h1>
+                        <div class="property-location">📍 Prashad Nagar, Georgetown, Region 4</div>
+                    </div>
+                    <div class="property-price">
+                        <div class="price-main">$35,000,000 GYD</div>
+                        <div class="price-usd">≈ $167,500 USD</div>
+                    </div>
+                </div>
+                
+                <!-- Key Features -->
+                <div class="property-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">🛏️</div>
+                        <div class="feature-label">4 Bedrooms</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🚿</div>
+                        <div class="feature-label">3 Bathrooms</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📐</div>
+                        <div class="feature-label">250 m²</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🌳</div>
+                        <div class="feature-label">Garden</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🚗</div>
+                        <div class="feature-label">Garage</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🏡</div>
+                        <div class="feature-label">2018 Built</div>
+                    </div>
+                </div>
+                
+                <!-- Property Description -->
+                <div class="property-description">
+                    <h3>About This Property</h3>
+                    <p>This stunning family home in the prestigious Prashad Nagar area offers modern living with traditional Caribbean charm. The property features spacious bedrooms, a beautiful garden with mature fruit trees, and a secure garage. Perfect for families looking for comfort and convenience in Georgetown's most sought-after neighborhood.</p>
+                    
+                    <p>The home includes high-quality finishes throughout, including ceramic tiles, mahogany doors, and energy-efficient windows. The kitchen is fully equipped with modern appliances, and the master bedroom features an en-suite bathroom with luxury fixtures.</p>
+                    
+                    <p>Located just minutes from top schools, shopping centers, and main transportation routes. The property is fully fenced with security features and includes a generator for backup power.</p>
+                </div>
+                
+                <!-- Detailed Property Information -->
+                <div class="property-details-grid">
+                    <div class="details-section">
+                        <h4>Property Details</h4>
+                        <div class="detail-item">
+                            <span>Property Type:</span>
+                            <span>Residential House</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Year Built:</span>
+                            <span>2018</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Lot Size:</span>
+                            <span>400 m²</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Property ID:</span>
+                            <span>CHH-GEO-001</span>
+                        </div>
+                    </div>
+                    
+                    <div class="details-section">
+                        <h4>Interior Features</h4>
+                        <div class="detail-item">
+                            <span>Flooring:</span>
+                            <span>Ceramic Tiles</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Kitchen:</span>
+                            <span>Modern, Fully Equipped</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Air Conditioning:</span>
+                            <span>3 Bedrooms</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Ceiling Fans:</span>
+                            <span>All Rooms</span>
+                        </div>
+                    </div>
+                    
+                    <div class="details-section">
+                        <h4>Exterior Features</h4>
+                        <div class="detail-item">
+                            <span>Parking:</span>
+                            <span>Covered Garage</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Garden:</span>
+                            <span>Landscaped with Fruit Trees</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Security:</span>
+                            <span>Fully Fenced</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Generator:</span>
+                            <span>15kW Standby</span>
+                        </div>
+                    </div>
+                    
+                    <div class="details-section">
+                        <h4>Utilities & Services</h4>
+                        <div class="detail-item">
+                            <span>Electricity:</span>
+                            <span>GPL Connected</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Water:</span>
+                            <span>GWI Connected</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Internet:</span>
+                            <span>Fiber Ready</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Garbage:</span>
+                            <span>Municipal Service</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Agent Contact Card -->
+            <div class="contact-card">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%234a7c59'/%3E%3Ccircle cx='50' cy='35' r='15' fill='%23fff'/%3E%3Cpath d='M20 80 Q50 65 80 80' fill='%23fff'/%3E%3C/svg%3E" alt="Agent Photo" class="agent-photo">
+                <div class="agent-name">Qumar Tarrington</div>
+                <div class="agent-title">Licensed Real Estate Agent</div>
+                <div class="agent-title" style="color: #2c5530; font-weight: bold;">Beyond the Boundary Real Estate</div>
+                <div class="agent-rating">⭐⭐⭐⭐⭐ 4.9/5 (47 reviews)</div>
+                
+                <div class="contact-buttons">
+                    <button class="btn btn-primary" onclick="callAgent()">📞 Call Agent</button>
+                    <button class="btn btn-whatsapp" onclick="openWhatsApp()">💬 WhatsApp</button>
+                    <button class="btn btn-secondary" onclick="emailAgent()">📧 Send Email</button>
+                    <button class="btn btn-secondary" onclick="scheduleViewing()">🏠 Schedule Viewing</button>
+                </div>
+                
+                <div style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                    <div>📱 +592-705-9857</div>
+                    <div>📧 beyondtheboundaryestate@gmail.com</div>
+                    <div>🏢 Licensed Agent #GY-2023-089</div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <h4>Property Actions</h4>
+                <div class="contact-buttons">
+                    <button class="btn btn-secondary">❤️ Save Property</button>
+                    <button class="btn btn-secondary">📤 Share Property</button>
+                    <button class="btn btn-secondary">📋 Compare Properties</button>
+                    <button class="btn btn-secondary">📊 Property Report</button>
+                </div>
+            </div>
+
+            <!-- Mortgage Calculator -->
+            <div class="mortgage-calculator">
+                <h4>🧮 Mortgage Calculator</h4>
+                <div class="calculator-form">
+                    <div class="form-group">
+                        <label for="loan-amount">Loan Amount (GYD)</label>
+                        <input type="number" id="loan-amount" value="28000000" placeholder="Enter loan amount">
+                    </div>
+                    <div class="form-group">
+                        <label for="down-payment">Down Payment (%)</label>
+                        <input type="number" id="down-payment" value="20" placeholder="20">
+                    </div>
+                    <div class="form-group">
+                        <label for="interest-rate">Interest Rate (%)</label>
+                        <input type="number" id="interest-rate" value="8.5" step="0.1" placeholder="8.5">
+                    </div>
+                    <div class="form-group">
+                        <label for="loan-term">Loan Term (years)</label>
+                        <input type="number" id="loan-term" value="25" placeholder="25">
+                    </div>
+                    <button class="btn btn-primary" onclick="calculateMortgage()">Calculate Payment</button>
+                    <div id="mortgage-result" style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 5px; display: none;">
+                        <strong>Monthly Payment: <span id="monthly-payment"></span></strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Similar Properties -->
+    <div class="similar-properties">
+        <h3>Similar Properties in Georgetown</h3>
+        <div class="similar-grid">
+            <div class="similar-card" onclick="window.location.href='#'">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%23556B2F'/%3E%3Cpath d='M150 40L250 100L150 140L50 100Z' fill='%23228B22'/%3E%3C/svg%3E" alt="Similar Property 1" class="similar-image">
+                <div class="similar-info">
+                    <div class="similar-title">Modern Family Home</div>
+                    <div style="color: #666; margin: 0.5rem 0;">3 bed • 2 bath • 200 m²</div>
+                    <div class="similar-price">$28,500,000 GYD</div>
+                </div>
+            </div>
+            
+            <div class="similar-card" onclick="window.location.href='#'">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%236B8E23'/%3E%3Cpath d='M150 45L240 95L150 135L60 95Z' fill='%234a7c59'/%3E%3C/svg%3E" alt="Similar Property 2" class="similar-image">
+                <div class="similar-info">
+                    <div class="similar-title">Luxury Villa with Pool</div>
+                    <div style="color: #666; margin: 0.5rem 0;">5 bed • 4 bath • 380 m²</div>
+                    <div class="similar-price">$65,000,000 GYD</div>
+                </div>
+            </div>
+            
+            <div class="similar-card" onclick="window.location.href='#'">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%232F4F4F'/%3E%3Cpath d='M150 50L230 90L150 130L70 90Z' fill='%231C3A1C'/%3E%3C/svg%3E" alt="Similar Property 3" class="similar-image">
+                <div class="similar-info">
+                    <div class="similar-title">Starter Home with Garden</div>
+                    <div style="color: #666; margin: 0.5rem 0;">2 bed • 1 bath • 120 m²</div>
+                    <div class="similar-price">$18,500,000 GYD</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentImageIndex = 0;
+        const images = document.querySelectorAll('.gallery-image');
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const totalImages = images.length;
+        
+        document.getElementById('total-images').textContent = totalImages;
+        
+        function showImage(index) {
+            // Hide all images
+            images.forEach(img => img.classList.remove('active'));
+            thumbnails.forEach(thumb => thumb.classList.remove('active'));
+            
+            // Show selected image
+            images[index].classList.add('active');
+            thumbnails[index].classList.add('active');
+            
+            currentImageIndex = index;
+            document.getElementById('current-image').textContent = index + 1;
+        }
+        
+        function changeImage(direction) {
+            currentImageIndex += direction;
+            
+            if (currentImageIndex >= totalImages) {
+                currentImageIndex = 0;
+            } else if (currentImageIndex < 0) {
+                currentImageIndex = totalImages - 1;
+            }
+            
+            showImage(currentImageIndex);
+        }
+        
+        function calculateMortgage() {
+            const loanAmount = parseFloat(document.getElementById('loan-amount').value);
+            const downPaymentPercent = parseFloat(document.getElementById('down-payment').value);
+            const interestRate = parseFloat(document.getElementById('interest-rate').value) / 100 / 12;
+            const loanTermMonths = parseFloat(document.getElementById('loan-term').value) * 12;
+            
+            const downPayment = loanAmount * (downPaymentPercent / 100);
+            const principal = loanAmount - downPayment;
+            
+            const monthlyPayment = principal * (interestRate * Math.pow(1 + interestRate, loanTermMonths)) / 
+                                 (Math.pow(1 + interestRate, loanTermMonths) - 1);
+            
+            const formatter = new Intl.NumberFormat('en-GY', {
+                style: 'currency',
+                currency: 'GYD',
+                minimumFractionDigits: 0
+            });
+            
+            document.getElementById('monthly-payment').textContent = formatter.format(monthlyPayment);
+            document.getElementById('mortgage-result').style.display = 'block';
+        }
+        
+        // Contact functions
+        function callAgent() {
+            window.open('tel:+5927059857', '_self');
+        }
+        
+        function openWhatsApp() {
+            const propertyTitle = "Beautiful Family Home with Garden";
+            const propertyPrice = "$35,000,000 GYD";
+            const propertyLocation = "Prashad Nagar, Georgetown";
+            
+            const message = `Hi Qumar! I'm interested in the property: ${propertyTitle} in ${propertyLocation} for ${propertyPrice}. Can you provide more information and arrange a viewing? Found this on Caribbean Home Hub.`;
+            const whatsappNumber = "+5927059857";
+            const whatsappURL = `https://wa.me/${whatsappNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
+            
+            window.open(whatsappURL, '_blank');
+        }
+        
+        function emailAgent() {
+            const subject = "Property Inquiry - Beautiful Family Home with Garden";
+            const body = "Hi Qumar,%0D%0A%0D%0AI found your listing on Caribbean Home Hub and I'm interested in the property at Prashad Nagar, Georgetown for $35,000,000 GYD.%0D%0A%0D%0ACould you please provide more information and schedule a viewing?%0D%0A%0D%0AThank you!";
+            window.open(`mailto:beyondtheboundaryestate@gmail.com?subject=${subject}&body=${body}`, '_self');
+        }
+        
+        function scheduleViewing() {
+            // Open WhatsApp with viewing request
+            const message = "Hi Qumar! I'd like to schedule a viewing for the Beautiful Family Home with Garden in Prashad Nagar, Georgetown ($35,000,000 GYD). When would be a good time? Found this property on Caribbean Home Hub.";
+            const whatsappURL = `https://wa.me/5927059857?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
+        }
+        
+        // Auto-advance gallery every 10 seconds
+        setInterval(() => {
+            changeImage(1);
+        }, 10000);
+    </script>
+</body>
+</html>

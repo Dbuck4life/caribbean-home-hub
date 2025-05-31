@@ -1,0 +1,37 @@
+json{
+  "name": "caribbean-home-hub",
+  "version": "1.0.0",
+  "description": "Secure real estate platform for Guyana",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "vercel build",
+    "deploy": "vercel --prod",
+    "db:seed": "node scripts/seed-database.js"
+  },
+  "dependencies": {
+    "@planetscale/database": "^1.11.0",
+    "@vercel/blob": "^0.15.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.9.7",
+    "groq-sdk": "^0.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/caribbean-home-hub.git"
+  },
+  "keywords": [
+    "real-estate",
+    "guyana",
+    "caribbean",
+    "property",
+    "vercel",
+    "planetscale"
+  ],
+  "author": "Caribbean Home Hub",
+  "license": "MIT"
+}

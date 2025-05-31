@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Dashboard - Caribbean Home Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c5530, #4a7c59);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .flag-icon {
+            width: 30px;
+            height: 20px;
+            background: linear-gradient(to bottom, 
+                #009639 0%, #009639 20%, 
+                #FFFFFF 20%, #FFFFFF 25%,
+                #FCD116 25%, #FCD116 50%,
+                #FFFFFF 50%, #FFFFFF 55%,
+                #009639 55%, #009639 100%);
+            border: 1px solid #000;
+            position: relative;
+            border-radius: 2px;
+        }
+        
+        .flag-icon::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 10px 0 10px 15px;
+            border-color: transparent transparent transparent #000;
+        }
+        
+        .flag-icon::after {
+            content: '';
+            position: absolute;
+            left: 3px;
+            top: 3px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 7px 0 7px 11px;
+            border-color: transparent transparent transparent #CE1126;
+        }
+        
+        .agent-nav {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .agent-nav a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .agent-nav a:hover {
+            color: #ffd700;
+        }
+        
+        .agent-welcome {
+            background: #2c5530;
+            color: white;
+            padding: 2rem 0;
+        }
+        
+        .welcome-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .welcome-text h1 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .welcome-stats {
+            display: flex;
+            gap: 2rem;
+            text-align: center;
+        }
+        
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            min-width: 100px;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+        
+        .sidebar {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+        
+        .sidebar h3 {
+            color: #2c5530;
+            margin-bottom: 1.5rem;
+        }
+        
+        .menu-item {
+            display: block;
+            padding: 1rem;
+            color: #333;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background: #2c5530;
+            color: white;
+        }
+        
+        .content-area {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .content-header {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .content-body {
+            padding: 2rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #2c5530;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4a7c59;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .photo-upload {
+            border: 3px dashed #ddd;
+            padding: 3rem;
+            text-align: center;
+            border-radius: 10px;
+            margin: 2rem 0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .photo-upload:hover {
+            border-color: #4a7c59;
+            background: #f8f9fa;
+        }
+        
+        .photo-upload.dragover {
+            border-color: #2c5530;
+            background: #e8f5e8;
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: #4a7c59;
+            margin-bottom: 1rem;
+        }
+        
+        .upload-text {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .upload-btn {
+            background: #4a7c59;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .upload-btn:hover {
+            background: #2c5530;
+        }
+        
+        .photo-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .preview-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255,0,0,0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .remove-btn:hover {
+            background: red;
+        }
+        
+        .photo-count {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: #2c5530;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1e3a22;
+        }
+        
+        .btn-secondary {
+            background: #ffd700;
+            color: #2c5530;
+        }
+        
+        .btn-secondary:hover {
+            background: #2c5530;
+            color: #ffd700;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #28a745;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+        }
+        
+        .ai-button-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .ai-status {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+            padding: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 3px solid #4a7c59;
+        }
+
+        .ai-tip {
+            background: #e8f5e8;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #4a7c59;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-container {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .welcome-stats {
+                width: 100%;
+                justify-content: space-around;
+            }
+            
+            .ai-button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <div class="flag-icon"></div>
+                <a href="index.html" style="color: white; text-decoration: none;">Caribbean Home Hub</a>
+            </div>
+            <ul class="agent-nav">
+                <li><a href="index.html">View Site</a></li>
+                <li><a href="#listings">My Listings</a></li>
+                <li><a href="#profile">Profile</a></li>
+                <li><a href="#logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="agent-welcome">
+        <div class="welcome-container">
+            <div class="welcome-text">
+                <h1>Welcome back, Qumar!</h1>
+                <p>Beyond the Boundary Real Estate Agent Dashboard</p>
+            </div>
+            <div class="welcome-stats">
+                <div class="stat-item">
+                    <div class="stat-number">12</div>
+                    <div>Active Listings</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">47</div>
+                    <div>Total Views</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div>Inquiries</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="sidebar">
+            <h3>Dashboard Menu</h3>
+            <a href="#" class="menu-item active" onclick="showSection('add-property')">➕ Add New Property</a>
+            <a href="#" class="menu-item" onclick="showSection('my-listings')">🏠 My Listings</a>
+            <a href="#" class="menu-item" onclick="showSection('inquiries')">💬 Inquiries</a>
+            <a href="#" class="menu-item" onclick="showSection('analytics')">📊 Analytics</a>
+            <a href="#" class="menu-item" onclick="showSection('profile')">👤 Profile Settings</a>
+        </div>
+
+        <div class="content-area">
+            <!-- Add Property Section -->
+            <div id="add-property" class="content-section">
+                <div class="content-header">
+                    <h2>Add New Property Listing</h2>
+                    <p>Fill out all the details to create a professional property listing with AI-powered descriptions</p>
+                </div>
+                <div class="content-body">
+                    <form id="property-form" onsubmit="submitProperty(event)">
+                        <!-- Basic Information -->
+                        <h3 style="color: #2c5530; margin-bottom: 1.5rem;">Basic Information</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="property-title">Property Title *</label>
+                                <input type="text" id="property-title" name="title" required placeholder="e.g., Beautiful Family Home with Garden">
+                            </div>
+                            <div class="form-group">
+                                <label for="property-type">Property Type *</label>
+                                <select id="property-type" name="type" required>
+                                    <option value="">Select Type</option>
+                                    <option value="residential">Residential</option>
+                                    <option value="commercial">Commercial</option>
+                                    <option value="agricultural">Agricultural Land</option>
+                                    <option value="land">Vacant Land</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price (GYD) *</label>
+                                <input type="number" id="price" name="price" required placeholder="35000000">
+                            </div>
+                            <div class="form-group">
+                                <label for="region">Region *</label>
+                                <select id="region" name="region" required>
+                                    <option value="">Select Region</option>
+                                    <option value="georgetown">Georgetown (Region 4)</option>
+                                    <option value="new-amsterdam">New Amsterdam (Region 6)</option>
+                                    <option value="linden">Linden (Region 10)</option>
+                                    <option value="region1">Region 1 - Barima-Waini</option>
+                                    <option value="region2">Region 2 - Pomeroon-Supenaam</option>
+                                    <option value="region3">Region 3 - Essequibo Islands-West Demerara</option>
+                                    <option value="region4">Region 4 - Demerara-Mahaica</option>
+                                    <option value="region5">Region 5 - Mahaica-Berbice</option>
+                                    <option value="region6">Region 6 - East Berbice-Corentyne</option>
+                                    <option value="region7">Region 7 - Cuyuni-Mazaruni</option>
+                                    <option value="region8">Region 8 - Potaro-Siparuni</option>
+                                    <option value="region9">Region 9 - Upper Takutu-Upper Essequibo</option>
+                                    <option value="region10">Region 10 - Upper Demerara-Berbice</option>
+                                </select>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="address">Full Address *</label>
+                                <input type="text" id="address" name="address" required placeholder="e.g., 123 Main Street, Prashad Nagar, Georgetown">
+                            </div>
+                        </div>
+
+                        <!-- Property Details -->
+                        <h3 style="color: #2c5530; margin: 2rem 0 1.5rem;">Property Details</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="bedrooms">Bedrooms</label>
+                                <select id="bedrooms" name="bedrooms">
+                                    <option value="">Select</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5+</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="bathrooms">Bathrooms</label>
+                                <select id="bathrooms" name="bathrooms">
+                                    <option value="">Select</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4+</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="floor-area">Floor Area (m²)</label>
+                                <input type="number" id="floor-area" name="floor-area" placeholder="250">
+                            </div>
+                            <div class="form-group">
+                                <label for="lot-size">Lot Size (m²)</label>
+                                <input type="number" id="lot-size" name="lot-size" placeholder="400">
+                            </div>
+                            <div class="form-group">
+                                <label for="year-built">Year Built</label>
+                                <input type="number" id="year-built" name="year-built" placeholder="2018" min="1900" max="2025">
+                            </div>
+                            <div class="form-group">
+                                <label for="condition">Property Condition</label>
+                                <select id="condition" name="condition">
+                                    <option value="">Select Condition</option>
+                                    <option value="new">Newly Built</option>
+                                    <option value="excellent">Excellent</option>
+                                    <option value="good">Good</option>
+                                    <option value="needs-work">Needs Renovation</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Features & Amenities -->
+                        <h3 style="color: #2c5530; margin: 2rem 0 1.5rem;">Features & Amenities</h3>
+                        
+                        <div class="form-group">
+                            <label>Outdoor Features</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="pool" name="features[]" value="pool">
+                                    <label for="pool">Swimming Pool</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="garden" name="features[]" value="garden">
+                                    <label for="garden">Garden</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="fruit-trees" name="features[]" value="fruit-trees">
+                                    <label for="fruit-trees">Fruit Trees</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="veranda" name="features[]" value="veranda">
+                                    <label for="veranda">Veranda/Deck</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="large-yard" name="features[]" value="large-yard">
+                                    <label for="large-yard">Large Yard</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Parking & Security</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="garage" name="features[]" value="garage">
+                                    <label for="garage">Garage</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="carport" name="features[]" value="carport">
+                                    <label for="carport">Carport</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="security-system" name="features[]" value="security-system">
+                                    <label for="security-system">Security System</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="fenced" name="features[]" value="fenced">
+                                    <label for="fenced">Fully Fenced</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="gated" name="features[]" value="gated">
+                                    <label for="gated">Gated Community</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Utilities & Amenities</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="ac" name="features[]" value="ac">
+                                    <label for="ac">Air Conditioning</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="generator" name="features[]" value="generator">
+                                    <label for="generator">Generator</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="solar" name="features[]" value="solar">
+                                    <label for="solar">Solar Panels</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="water-tank" name="features[]" value="water-tank">
+                                    <label for="water-tank">Water Tank</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="internet" name="features[]" value="internet">
+                                    <label for="internet">Internet Ready</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Property Description with AI -->
+                        <h3 style="color: #2c5530; margin: 2rem 0 1.5rem;">Property Description</h3>
+                        <div class="form-group full-width">
+                            <label for="description">Description *</label>
+                            <div class="ai-tip">
+                                <strong>💡 Pro Tip:</strong> Use our AI-powered description generator to create professional, engaging property descriptions in seconds! Just fill in the basic property details above, then click "Generate AI Description" for instant, high-quality content that attracts buyers.
+                            </div>
+                            <div class="ai-button-group">
+                                <button type="button" class="btn btn-secondary" onclick="generateDescription()" id="ai-btn">
+                                    🤖 Generate AI Description
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="improveDescription()" id="improve-btn" style="display: none;">
+                                    ✨ Improve Description
+                                </button>
+                            </div>
+                            <textarea id="description" name="description" required placeholder="Write your property description here, OR use our AI generator above to create a professional description instantly! The AI will use all your property details to write compelling content that attracts buyers."></textarea>
+                            <div id="ai-status" class="ai-status" style="display: none;"></div>
+                        </div>
+
+                        <!-- Photo Upload -->
+                        <h3 style="color: #2c5530; margin: 2rem 0 1.5rem;">Property Photos</h3>
+                        <div class="photo-upload" onclick="document.getElementById('photo-input').click()">
+                            <div class="upload-icon">📸</div>
+                            <div class="upload-text">
+                                <strong>Click to upload photos</strong> or drag and drop<br>
+                                Upload up to 30 high-quality images (JPG, PNG, HEIC)
+                            </div>
+                            <button type="button" class="upload-btn">Choose Photos</button>
+                            <input type="file" id="photo-input" class="file-input" multiple accept="image/*" onchange="handlePhotoUpload(event)">
+                        </div>
+                        
+                        <div id="photo-preview" class="photo-preview"></div>
+                        <div id="photo-count" class="photo-count">0 photos uploaded (maximum 30)</div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="clearForm()">Clear Form</button>
+                            <button type="submit" class="btn btn-primary">Submit for Approval</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Other sections would go here -->
+            <div id="my-listings" class="content-section" style="display: none;">
+                <div class="content-header">
+                    <h2>My Property Listings</h2>
+                    <p>Manage your active and pending property listings</p>
+                </div>
+                <div class="content-body">
+                    <p>Your listings will appear here once you've submitted properties for approval.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let uploadedPhotos = [];
+
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.style.display = 'none');
+            
+            // Show selected section
+            document.getElementById(sectionId).style.display = 'block';
+            
+            // Update menu active state
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function handlePhotoUpload(event) {
+            const files = Array.from(event.target.files);
+            
+            files.forEach(file => {
+                if (uploadedPhotos.length >= 30) {
+                    alert('Maximum 30 photos allowed');
+                    return;
+                }
+                
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        uploadedPhotos.push({
+                            file: file,
+                            url: e.target.result,
+                            name: file.name
+                        });
+                        updatePhotoPreview();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function updatePhotoPreview() {
+            const preview = document.getElementById('photo-preview');
+            const counter = document.getElementById('photo-count');
+            
+            preview.innerHTML = '';
+            
+            uploadedPhotos.forEach((photo, index) => {
+                const item = document.createElement('div');
+                item.className = 'preview-item';
+                item.innerHTML = `
+                    <img src="${photo.url}" alt="${photo.name}" class="preview-img">
+                    <button type="button" class="remove-btn" onclick="removePhoto(${index})">×</button>
+                `;
+                preview.appendChild(item);
+            });
+            
+            counter.textContent = `${uploadedPhotos.length} photos uploaded (maximum 30)`;
+        }
+
+        function removePhoto(index) {
+            uploadedPhotos.splice(index, 1);
+            updatePhotoPreview();
+        }
+
+        function submitProperty(event) {
+            event.preventDefault();
+            
+            if (uploadedPhotos.length === 0) {
+                alert('Please upload at least one photo');
+                return;
+            }
+            
+            // Simulate form submission
+            const formData = new FormData(event.target);
+            
+            // Add photos to form data
+            uploadedPhotos.forEach((photo, index) => {
+                formData.append(`photo_${index}`, photo.file);
+            });
+            
+            // Show success message
+            const successMsg = document.createElement('div');
+            successMsg.className = 'success-message';
+            successMsg.innerHTML = `
+                <strong>Property submitted successfully!</strong><br>
+                Your listing has been submitted for approval. You'll receive an email notification once it's reviewed.
+                <br><br>
+                <strong>WhatsApp notifications:</strong> You'll also receive updates on +592-705-9857
+            `;
+            
+            const contentBody = document.querySelector('#
